@@ -20,14 +20,21 @@ class Convertisseur extends React.Component {
     render() {
         return(
             <div>
-                <label htmlFor="Celsius">Température °C</label>
-                <input type="text" value={this.state.temp} onChange={this.chgTemp.bind(this)}/>
-                <label htmlFor="Fahrenheit">Température F°</label>
-                <input type="text" value={((this.state.temp*9/5)+32)} onChange={this.chgCtoF.bind(this)}/>
-                {(this.state.temp < 100) ? <p>L'eau ne bout pas</p> : <p>L'eau bout</p>}
+                <Temperature unite = "Celsius" val={this.state.temp} chg={this.chgTemp.bind(this)} ></Temperature>
+                <Temperature unite = "Fahrenheit" val={((this.state.temp*9/5)+32)} chg={this.chgCtoF.bind(this)} ></Temperature>
+                {(this.state.temp <= 100) ? <p>L'eau ne bout pas</p> : <p>L'eau bout</p>}
             </div>
         )
     }
+}
+
+function Temperature(props) {
+    return (
+        <React.Fragment>
+            <label htmlFor={props.unite}>Température °C</label>
+            <input type="text" id={props.unite} value={props.val} onChange={props.chg} />
+        </React.Fragment>
+    )
 }
 
 ReactDOM.render(<Convertisseur></Convertisseur>, document.getElementById('conv'))
