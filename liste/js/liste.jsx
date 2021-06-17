@@ -73,7 +73,7 @@ class Rayon extends React.Component {
     render() {
         return (
             <React.Fragment key={this.props.key}>
-                <tr  className={()}>
+                <tr >
                     <td colSpan="2">
                         {this.props.categ}
                     </td>
