@@ -112,6 +112,9 @@ body {
     height: 600px;
     background-color: grey;
     border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .message {
@@ -141,4 +144,14 @@ button {
 
 .btn {
     width: 150px;
+}
+
+.mess {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 600px;
+  max-width: 90%;
+  word-break: break-all;
+  border: 1px solid white;
 }
