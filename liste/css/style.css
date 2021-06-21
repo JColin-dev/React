@@ -1,0 +1,10 @@
+.rouge {
+    color:red;
+}
+.noir {
+    color: rgb(57, 204, 57);
+}
+
+.category {
+    font-weight: bold;
+}

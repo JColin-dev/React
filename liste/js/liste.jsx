@@ -1,4 +1,3 @@
-
 let tabProd = [
     { category: "Sporting Goods", price: "$49.99", stocked: true, name: "Football" },
     { category: "Sporting Goods", price: "$9.99", stocked: true, name: "Baseball" },
@@ -15,8 +14,14 @@ let tabProd = [
 }*/
 
 class Tableau extends React.Component {
+    constructor(props){
+        super(props)
+        this.state={rech:"", chk: false, tableau: [...tabProd] }
+        this.chgRech =this.chgRech.bind(this)
+        this.chgCheck =this.chgCheck.bind(this)
+    }
     renvoisRayons() {
-        let distinctRayons = tabProd.filter((ligne, indice, tableau) => {
+        let distinctRayons = this.state.tableau.filter((ligne, indice, tableau) => {
             return tableau.findIndex((elem) => elem.category === ligne.category) === indice
         })
         console.log(distinctRayons)
@@ -24,7 +29,7 @@ class Tableau extends React.Component {
     }
 
     renvoisProdRayon(nomRayon) {
-        let produitRayon = tabProd.filter((ligne, indice, tableau) => {
+        let produitRayon = this.state.tableau.filter((ligne, indice, tableau) => {
             return ligne.category === nomRayon
         }) 
         return produitRayon
@@ -49,43 +54,76 @@ class Tableau extends React.Component {
         }
         return ret
     }*/
+
+    chgRech(event) {
+        this.setState({rech:event.target.value})
+        this.setState({tableau: this.renvoisProdFiltre(this.state.chk, event.target.value)})
+    }
+
+    renvoisProdFiltre(stock, recherche) {
+        if(stock == true) {
+        let produitStock = tabProd.filter((ligne) => {
+            return ligne.stocked === stock
+        }) 
+        let prodStockRet = produitStock.filter((ligne) => {
+            return ligne.name.match(new RegExp(recherche, "i"))
+        })
+        return prodStockRet
+        } else {
+            let prodStockRet = tabProd.filter((ligne) => {
+                return ligne.name.match(new RegExp(recherche, "i"))
+            })
+            return prodStockRet
+        }
+    }
+
+
+    chgCheck(event) {
+        this.setState({chk:event.target.checked})
+        this.setState({tableau: this.renvoisProdFiltre(event.target.checked, this.state.rech)})
+    }
+
     render() {
         let rayons = this.renvoisRayons()
         return (
-            <table>
-                <thead>
-                    <tr>
-                        <th>Nom</th>
-                        <th>Prix</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {rayons.map((ligne, key) => {
-                        return <Rayon categ={ligne.category} key={key} tabProdRayon={this.renvoisProdRayon(ligne.category)}></Rayon>
-                    })}
-                </tbody>
-            </table>
+            <React.Fragment>
+                <InputRecherche etat={this.state.rech} chg={this.chgRech}/>
+                <CheckStock etat={this.state.chk} chg={this.chgCheck}/>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nom</th>
+                                <th>Prix</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {rayons.map((ligne, key) => {
+                                return <Rayon categ={ligne.category} key={key} tabProdRayon={this.renvoisProdRayon(ligne.category)}></Rayon>
+                            })}
+                        </tbody>
+                    </table>
+            </React.Fragment>
         )
     }
 }
 
-class Rayon extends React.Component {
-    render() {
+function Rayon(props) {
         return (
-            <React.Fragment key={this.props.key}>
-                <tr >
+            <React.Fragment key={props.key}>
+                
+                <tr className="category">
                     <td colSpan="2">
-                        {this.props.categ}
+                        {props.categ}
                     </td>
                 </tr>
-                {this.props.tabProdRayon.map((ligne) => {
+                {props.tabProdRayon.map((ligne) => {
                     return <Article ligne={ligne}></Article>
                 })}
                 
             </React.Fragment>
         )
     }
-}
+
 
 function Article (props) {
     
@@ -98,6 +136,18 @@ function Article (props) {
     
 }
 
-let texte = <Tableau />
+function InputRecherche(props) {
+    return(
+        <input type="text"  placeholder="Saisissez votre recherche" value={props.etat} onChange={props.chg}/>
+    )
+}
 
-ReactDOM.render(texte, document.getElementById("liste"))
+function CheckStock(props) {
+    return(
+        <div>
+            <input type="checkbox" id="chlStock" checked={props.etat} onChange={props.chg}/> <label htmlFor="chkStock">Uniquement les articles en stock</label>
+        </div>
+    )
+}
+
+ReactDOM.render(<Tableau />, document.getElementById("liste"))

@@ -25,7 +25,6 @@ class Welcome extends React.Component {
                 <p>Bonjour, {this.state.inp}</p>
                 <p>Il est {this.state.d.toLocaleTimeString()}</p>
                 <input type="text" value={this.state.inp} onChange={this.chgInp.bind(this)}/>
-                {(this.state.aff==true) ? <p>On affiche</p> :""}
                 <button onClick={this.clickBtn.bind(this)}>Affiche</button>
             </div>
         )
