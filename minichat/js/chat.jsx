@@ -60,7 +60,7 @@ class Chat extends React.Component {
 
     receivedMessage (data) {
         let temp = [... this.state.listMess]
-            temp.push({name:data.content})
+            temp.push({mess:data.content, user:data.from})
             this.setState({listMess:temp})
             console.log(temp)
     }
